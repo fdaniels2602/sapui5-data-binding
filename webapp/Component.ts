@@ -1,5 +1,6 @@
 import BaseComponent from "sap/ui/core/UIComponent";
 import { createDeviceModel } from "./model/models";
+import BindingMode from "sap/ui/model/BindingMode";
 
 /**
  * @namespace my.databinding.databinding

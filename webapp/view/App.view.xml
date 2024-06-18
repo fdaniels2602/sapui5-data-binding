@@ -1,7 +1,82 @@
-<mvc:View controllerName="my.databinding.databinding.controller.App"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content />
-    </Page>
+<mvc:View
+    controllerName="my.databinding.databinding.controller.App"
+	xmlns="sap.m"
+	xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc">
+	<Panel headerText="{i18n>panelHeaderText}" class="sapUiResponsiveMargin" width="auto">
+		<form:SimpleForm editable="true" layout="ColumnLayout">
+			<Label text="{i18n>firstName}"/>
+			<Input value="{/firstName}" valueLiveUpdate="true" width="200px" enabled="{/enabled}"/>
+			<Label text="{i18n>lastName}"/>
+			<Input value="{/lastName}" valueLiveUpdate="true" width="200px" enabled="{/enabled}"/>
+			<Label text="{i18n>selected}"/>
+			<CheckBox selected="{/enabled}"/>
+		</form:SimpleForm>
+	</Panel>
+    <Panel headerText="{i18n>panel2HeaderText}" class="sapUiResponsiveMargin" width="auto">
+		<content>
+			<l:VerticalLayout>
+				<Label labelFor="address" text="{i18n>address}:"/>
+				<FormattedText class="sapUiSmallMarginBottom"
+					htmlText="{/address/street}&lt;br>{/address/zip} {/address/city}&lt;br>{/address/country}"
+					id="address" 
+					width="200px"/>
+                <Link href="{
+						parts: [
+							'/firstName',
+							'/lastName'
+						],
+						formatter: '.formatMail'
+					}"
+					text="{i18n>sendEmail}"/>
+			</l:VerticalLayout>
+            <l:VerticalLayout>
+                <Label labelFor="salesAmount" text="{i18n>salesAmount}:"/>
+                <Input description="{/currencyCode}" enabled="{/enabled}" id="salesAmount"
+                    value="{
+                        parts: [
+                            {path: '/salesAmount'},
+                            {path: '/currencyCode'}
+                        ],
+                        type: 'sap.ui.model.type.Currency',
+                        formatOptions: {
+                            showMeasure: false,
+                            decimals: 2
+                        }
+                    }" 
+                    width="200px"/>
+            </l:VerticalLayout>
+		</content>
+	</Panel>
+...
+	<Panel headerText="{i18n>panel3HeaderText}" class="sapUiResponsiveMargin" width="auto">
+		<List headerText="{i18n>productListTitle}" items="{products>/Products}">
+			<items>
+				<ObjectListItem title="{products>ProductName}"
+					number="{
+						parts: [
+							{path: 'products>UnitPrice'},
+							{path: '/currencyCode'}
+						],
+						type: 'sap.ui.model.type.Currency',
+						formatOptions: { showMeasure: false }
+					}"
+					numberUnit="{/currencyCode}">
+					<attributes>
+						<ObjectAttribute text="{products>QuantityPerUnit}"/>
+						<ObjectAttribute title="{i18n>stockValue}"
+							text="{
+								parts: [
+									{path: 'products>UnitPrice'},
+									{path: 'products>UnitsInStock'},
+									{path: '/currencyCode'}
+								],
+								formatter: '.formatStockValue'
+							}"/>
+					</attributes>
+				</ObjectListItem>
+			</items>
+		</List>
+	</Panel>
 </mvc:View>
